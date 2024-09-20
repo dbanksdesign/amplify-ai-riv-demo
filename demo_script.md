@@ -119,7 +119,48 @@ Now go over to React code
 We have also built a simple, but flexible chat component to go along with our AI conversation routes
 
 ```tsx
+const { user } = React.useContext(UserContext);
+const [
+  {
+    data: { messages },
+    isLoading,
+  },
+  handleSendMessage,
+] = useAIConversation("chat");
 
+return (
+  <AIConversation
+    isLoading={isLoading}
+    avatars={{
+      user: {
+        avatar: <Avatar src={imgUrl(user?.image ?? "")} />,
+        username: user?.username ?? "",
+      },
+    }}
+    messages={messages}
+    handleSendMessage={handleSendMessage}
+    displayText={{
+      getMessageTimestampText: (date) =>
+        date.toLocaleTimeString("en-US", {
+          hour: "numeric",
+          minute: "numeric",
+          hour12: true,
+        }),
+    }}
+    responseComponents={{
+      ListingCard: {
+        description: "Used to display a rental listing to the user",
+        component: ConnectedListingCard,
+        props: {
+          id: {
+            type: "string",
+            description: "The id of the listing to display",
+          },
+        },
+      },
+    }}
+  />
+);
 ```
 
 ```ts
