@@ -2,7 +2,7 @@
 import * as React from "react";
 import { fetchAuthSession } from "aws-amplify/auth";
 import { Schema } from "@/../amplify/data/resource";
-import { client, authClient } from "@/client";
+import { client } from "@/client";
 
 interface UserContextProps {
   user?: Schema["User"]["type"];
@@ -15,22 +15,20 @@ export const UserProvider = ({ children }: React.PropsWithChildren) => {
 
   React.useEffect(() => {
     fetchAuthSession().then((sesh) => {
-      console.log({ sesh });
       client.models.User.list({
         filter: {
           identityId: {
             eq: sesh.identityId ?? "",
           },
         },
-      }).then(({ data, ...rest }) => {
-        console.log({ data, rest });
+      }).then(({ data }) => {
         if (!data || data?.length < 1) {
           // no user model exists, create one
-          authClient.models.User.create({
+          client.models.User.create({
             identityId: sesh.identityId,
             username: sesh.identityId,
           }).then(({ data }) => {
-            console.log({ data });
+            // @ts-expect-error dunno
             setUser(data);
           });
         } else {

@@ -1,7 +1,8 @@
-import { defineBackend } from '@aws-amplify/backend';
-import { auth } from './auth/resource';
-import { data } from './data/resource';
-import { storage } from './storage/resource';
+import * as cdk from "aws-cdk-lib";
+import { defineBackend } from "@aws-amplify/backend";
+import { auth } from "./auth/resource";
+import { data } from "./data/resource";
+import { storage } from "./storage/resource";
 import { Distribution, OriginAccessIdentity } from "aws-cdk-lib/aws-cloudfront";
 import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
 
@@ -11,14 +12,13 @@ import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
 const backend = defineBackend({
   auth,
   data,
-  storage
+  storage,
 });
-
 
 // Add Cloudfront distro infront of the bucket
 const originAccessIdentity = new OriginAccessIdentity(
   backend.storage.resources.bucket.stack,
-  "OriginAccessIdentity",
+  "OriginAccessIdentity"
 );
 
 backend.storage.resources.bucket.grantRead(originAccessIdentity);
@@ -32,5 +32,11 @@ const distro = new Distribution(
         originAccessIdentity,
       }),
     },
-  },
+  }
 );
+
+backend.addOutput({
+  custom: {
+    cf: cdk.Lazy.string({ produce: () => distro.distributionDomainName }),
+  },
+});

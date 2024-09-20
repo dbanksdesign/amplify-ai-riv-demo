@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import * as React from "react";
 import { Flex, View } from "@aws-amplify/ui-react";
 
@@ -17,7 +17,7 @@ export const Header = ({ children }: React.PropsWithChildren) => {
           <Link href="/">
             <LuBird />
           </Link>
-          <Link href="/chat">
+          <Link href="/search">
             <LuSearch />
           </Link>
         </Flex>

@@ -1,29 +1,16 @@
-'use client';
+"use client";
 import * as React from "react";
-import { generateClient } from "aws-amplify/api";
 import { Schema } from "@/../amplify/data/resource";
-import {
-  Button,
-  DropZone,
-  Flex,
-  Loader,
-  Placeholder,
-  TextField,
-} from "@aws-amplify/ui-react";
+import { Button, DropZone, Flex, TextField } from "@aws-amplify/ui-react";
 import { uploadData } from "aws-amplify/storage";
 import { Image } from "@/components/Image";
 import { customToast, getFormDataFromEvent } from "@/utils";
-import { useParams } from "next/navigation";
 import { UserContext } from "@/components/UserProvider";
-
-const client = generateClient<Schema>({
-  authMode: "userPool",
-});
+import { client } from "@/client";
 
 const UserForm = ({ user }: { user: Schema["User"]["type"] }) => {
   console.log({ user });
   const [img, setImg] = React.useState(user?.image);
-  const [isUploading, setIsUploading] = React.useState(false);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -46,7 +33,7 @@ const UserForm = ({ user }: { user: Schema["User"]["type"] }) => {
       />
       <DropZone
         flex="1"
-        onDropComplete={({ acceptedFiles, rejectedFiles }) => {
+        onDropComplete={({ acceptedFiles }) => {
           const file = acceptedFiles[0];
           if (file) {
             uploadData({
@@ -61,18 +48,6 @@ const UserForm = ({ user }: { user: Schema["User"]["type"] }) => {
         {img ? (
           <Flex justifyContent="center" flex="1" position="relative">
             <Image src={img} alt="" />
-            {isUploading ? (
-              <Flex
-                position="absolute"
-                justifyContent="center"
-                alignItems="center"
-                width="100%"
-                height="100%"
-                backgroundColor="overlay.20"
-              >
-                <Loader position="absolute" size="large" />
-              </Flex>
-            ) : null}
           </Flex>
         ) : (
           "Drag image here"
@@ -84,7 +59,7 @@ const UserForm = ({ user }: { user: Schema["User"]["type"] }) => {
 };
 
 export default function UserPage() {
-  const {user} = React.useContext(UserContext);
+  const { user } = React.useContext(UserContext);
 
   return (
     <Flex direction="column" padding="xl">

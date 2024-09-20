@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import * as React from "react";
 import {
   Flex,
@@ -13,7 +13,7 @@ import { StorageManager } from "@aws-amplify/ui-react-storage";
 import { customToast, getFormDataFromEvent } from "@/utils";
 import { UserContext } from "@/components/UserProvider";
 import { useRouter } from "next/navigation";
-import { authClient } from "@/client";
+import { client } from "@/client";
 
 export default function CreateListingPage() {
   const [images, setImages] = React.useState<string[]>([]);
@@ -22,7 +22,7 @@ export default function CreateListingPage() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = getFormDataFromEvent(event);
-    authClient.models.Listing.create({
+    client.models.Listing.create({
       title: data.title as string,
       type: data.type as string,
       city: data.city as string,

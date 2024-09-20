@@ -34,7 +34,7 @@ export const LinkedUserChip = ({ user }: UserChipProps) => {
   }
 
   return (
-    <Link href={`/profile/${user.id}`} style={{ textDecoration: "none" }}>
+    <Link href={`/profile/edit`} style={{ textDecoration: "none" }}>
       <UserChip user={user} />
     </Link>
   );
