@@ -26,9 +26,10 @@
     "@aws-amplify/backend": "^1.2.2",
     "@aws-amplify/backend-ai": "^0.1.1",
     "@aws-amplify/backend-cli": "^1.2.6",
-    "@aws-amplify/graphql-api-construct": "^1.13.0-ai.2",
+    "@aws-amplify/graphql-api-construct": "1.13.0-ai.2",
     "@aws-amplify/graphql-conversation-transformer": "^0.2.1",
     "@aws-amplify/graphql-generation-transformer": "^0.2.1",
+    "@aws-sdk/client-bedrock-runtime": "^3.654.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
@@ -42,6 +43,6 @@
     "typescript": "^5.6.2"
   },
   "overrides": {
-    "@aws-amplify/graphql-api-construct": "^1.13.0-ai.2"
+    "@aws-amplify/graphql-api-construct": "1.13.0-ai.2"
   }
 }

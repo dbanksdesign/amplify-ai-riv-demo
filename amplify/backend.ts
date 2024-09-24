@@ -1,18 +1,18 @@
 import * as cdk from "aws-cdk-lib";
+import { Distribution, OriginAccessIdentity } from "aws-cdk-lib/aws-cloudfront";
+import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
 import { defineBackend } from "@aws-amplify/backend";
 import { auth } from "./auth/resource";
 import { data } from "./data/resource";
 import { storage } from "./storage/resource";
-import { Distribution, OriginAccessIdentity } from "aws-cdk-lib/aws-cloudfront";
-import { S3Origin } from "aws-cdk-lib/aws-cloudfront-origins";
+import { generateImage } from "./functions/generateImage/resource";
+import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
-/**
- * @see https://docs.amplify.aws/react/build-a-backend/ to add storage, functions, and more
- */
 const backend = defineBackend({
   auth,
   data,
   storage,
+  generateImage,
 });
 
 // Add Cloudfront distro infront of the bucket
@@ -40,3 +40,15 @@ backend.addOutput({
     cf: cdk.Lazy.string({ produce: () => distro.distributionDomainName }),
   },
 });
+
+backend.generateImage.resources.lambda.addToRolePolicy(
+  new PolicyStatement({
+    effect: Effect.ALLOW,
+    actions: ["bedrock:*"],
+    resources: [
+      `arn:aws:bedrock:${
+        cdk.Stack.of(backend.data).region
+      }::foundation-model/*`,
+    ],
+  })
+);

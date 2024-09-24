@@ -135,7 +135,7 @@ export const ConnectedSmallListingCard = ({
               </Text>
             </Text>
             <Button variation="primary">Book now</Button>
-            <Link className={"amplify-button"} href={`/listing/${listing.id}`}>
+            <Link className={"amplify-button"} href={`/listings/${listing.id}`}>
               Details
             </Link>
           </Flex>
@@ -234,7 +234,7 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
         </Text>
         <Flex direction="row">
           <Button variation="primary">Book now</Button>
-          <Link className={"amplify-button"} href={`/listing/${listing.id}`}>
+          <Link className={"amplify-button"} href={`/listings/${listing.id}`}>
             Details
           </Link>
         </Flex>

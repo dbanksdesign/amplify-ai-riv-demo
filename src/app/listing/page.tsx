@@ -32,7 +32,7 @@ export default function ListingsPage() {
 
   return (
     <ScrollView>
-      <Flex direction="column">
+      <Flex direction="column" padding="xl">
         {listings.map((listing) => (
           <ListingCard listing={listing} key={listing.id} />
         ))}

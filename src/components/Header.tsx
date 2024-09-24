@@ -14,7 +14,7 @@ export const Header = ({ children }: React.PropsWithChildren) => {
     <View className={headerTheme.className()}>
       <Flex direction="row" alignItems="center">
         <Flex direction="row" alignItems="center" flex="1" gap="large">
-          <Link href="/">
+          <Link href="/listings">
             <LuBird />
           </Link>
           <Link href="/search">

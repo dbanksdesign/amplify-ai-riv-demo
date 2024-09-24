@@ -101,10 +101,6 @@ conversation route
         description: `Used to get the current weather of a city`,
         query: a.ref("getWeather"),
       },
-      {
-        description: `Used to get the sales for a listing`,
-        query: a.ref("getSalesForListing"),
-      },
     ],
   }),
 ```
@@ -152,3 +148,59 @@ date.toLocaleTimeString("en-US", {
 - see the current bookings?
 - update the description of a rental
 - could we have a separate conversation route that is specific to a workflow/page?
+
+Scale back the code
+Benefits and who this is for
+Amplify AI is the easiest way
+
+- prebuilt ui components
+- backed by bedrock
+- app developer persona
+
+- greatest way
+
+Give a lot of framing
+
+- here are the use cases
+
+talk about theming
+
+- how to add context to bedrock
+
+build on bedrock
+app developer persona
+how fast and easy compared to other ways
+Don't need to know any IaC
+familiar to them (JS/TS)
+customers can use this for any size, can be used in production
+integrate with any aws service
+
+---
+
+Amplify AI is the easiest way for frontend and fullstack developers to build and scale generative AI apps - we have pre-built UI components, data helpers, and more so developers can build powerful, Bedrock-backed apps in just a few lines of familiar code. Just like Amplify, we are targetting application developers, ones that are familiar and comfortable with TypeScript and React, but not cloud services. With Amplify AI they can build meaningful generative AI experiences in their app with little cloud or AI experience.
+
+We've built the Ampify AI functionality around the use cases we've heard customers talk about the most
+
+- Chatbot to application
+- Conversational search: Improve employee productivity by quickly and easily finding accurate information and summarizing content through a conversational interface.
+- AI-generated content: Summarization, alt text generation
+
+Amplify AI makes all of this easy.
+
+I'm going to show two short demos, first how to build a chatbot with a beautiful UI, second how to add context to customize your LLM to enable summarization use cases.
+
+The demo app I've built is using Ampify and NextJS to have a full-stack application. I built an example airbnb/vrbo clone
+
+Few lines of code → chatbot with a beautiful UI
+
+Few lines of code → add context to Bedrock (summarization)
+
+Again, Amplify AI builds on the power of Bedrock for the app developer persona, using the programming languages and paradigms those developers are comfortable with to build apps for their companies of all sizes.
+
+Start with type of app we are building
+
+- Drop in chatbot
+- Why this is better than chat widgets, customizable and easy to integrate with their code
+- Conversational search piece
+- Say how it searches through the data
+- Summarization - have it pre-built

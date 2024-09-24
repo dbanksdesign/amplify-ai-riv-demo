@@ -1,8 +1,76 @@
 import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 import { getWeather } from "../functions/getWeather/resource";
-import { getSalesForListing } from "../functions/getSales/resource";
+import { generateImage } from "../functions/generateImage/resource";
 
 const schema = a.schema({
+  generateImage: a
+    .query()
+    .arguments({
+      prompt: a.string(),
+    })
+    .returns(a.string().array())
+    .handler(a.handler.function(generateImage))
+    .authorization((allow) => [allow.authenticated()]),
+
+  generateListing: a
+    .generation({
+      aiModel: a.ai.model("Claude 3.5 Sonnet"),
+      systemPrompt: `You are a helpful assistant that generates rental listing information based on a description. Please fill out the information as best as you can. Using the description provided create a catchy title, a bulleted list for amenities, and a longform description between 20 and 200 words. Make up information if none is provided.`,
+      inferenceConfiguration: {
+        temperature: 0.7,
+        topP: 1,
+        maxTokens: 4000,
+      },
+    })
+    .arguments({
+      description: a.string(),
+    })
+    .returns(
+      a.customType({
+        title: a.string(),
+        description: a.string(),
+        amenities: a.string(),
+        numBedrooms: a.integer(),
+        bedrooms: a.string().array(),
+        numBathrooms: a.integer(),
+        type: a.string(),
+        sleeps: a.integer(),
+        sqft: a.integer(),
+        price: a.integer(),
+      })
+    )
+    .authorization((allow) => [allow.authenticated()]),
+
+  reviewSummarizer: a
+    .generation({
+      aiModel: a.ai.model("Claude 3.5 Sonnet"),
+      systemPrompt: `You are a helpful assistant that summarizes reviews. Give a concise summary of the supplied reviews. The summary should be between 20 and 200 characters.`,
+    })
+    .arguments({
+      reviews: a.string().array(),
+    })
+    .returns(
+      a.customType({
+        summary: a.string(),
+      })
+    )
+    .authorization((allow) => [allow.authenticated()]),
+
+  chat: a.conversation({
+    aiModel: a.ai.model("Claude 3.5 Sonnet"),
+    systemPrompt: `Talk like a pirate`,
+    tools: [
+      {
+        description: "Used to get the current weather of a city",
+        query: a.ref("getWeather"),
+      },
+      {
+        description: `Used to list rental listings`,
+        query: a.ref("listListings"),
+      },
+    ],
+  }),
+
   getWeather: a
     .query()
     .arguments({ city: a.string() })
@@ -20,7 +88,6 @@ const schema = a.schema({
       username: a.string(),
       listings: a.hasMany("Listing", "hostId"),
       reviews: a.hasMany("Review", "reviewerId"),
-      summaries: a.hasMany("ReviewSummary", "requesterId"),
       reservations: a.hasMany("Reservation", "userId"),
       location: a.string(),
       identityId: a.string(),
@@ -53,7 +120,6 @@ const schema = a.schema({
       sleeps: a.integer(),
       sqft: a.integer(),
       reviews: a.hasMany("Review", "listingId"),
-      summaries: a.hasMany("ReviewSummary", "listingId"),
       reservations: a.hasMany("Reservation", "listingId"),
       host: a.belongsTo("User", "hostId"),
       hostId: a.id(),
