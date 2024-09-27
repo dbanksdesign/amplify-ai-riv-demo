@@ -1,3 +1,10 @@
-.amplify-ai-conversation__form__attach {
+/* .amplify-ai-conversation__form__attach {
   display: none;
+} */
+
+.ai-message__image {
+  max-width: 400px;
+  max-height: 400px;
+  margin-block: 1rem;
+  border-radius: var(--amplify-radii-medium);
 }

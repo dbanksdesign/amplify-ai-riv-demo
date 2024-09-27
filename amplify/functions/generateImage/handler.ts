@@ -3,7 +3,6 @@ import {
   InvokeModelCommand,
 } from "@aws-sdk/client-bedrock-runtime";
 import type { Schema } from "../../data/resource";
-import { text } from "stream/consumers";
 
 export const handler: Schema["generateImage"]["functionHandler"] = async (
   event

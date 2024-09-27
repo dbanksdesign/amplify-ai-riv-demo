@@ -58,7 +58,7 @@ const schema = a.schema({
 
   chat: a.conversation({
     aiModel: a.ai.model("Claude 3.5 Sonnet"),
-    systemPrompt: `Talk like a pirate`,
+    systemPrompt: `You are a helpful assistant for a vacation home rental company.`,
     tools: [
       {
         description: "Used to get the current weather of a city",
@@ -143,62 +143,6 @@ const schema = a.schema({
       allow.owner(),
       allow.publicApiKey().to(["read"]),
     ]),
-  ReviewSummary: a
-    .model({
-      requester: a.belongsTo("User", "requesterId"),
-      requesterId: a.id(),
-      listing: a.belongsTo("Listing", "listingId"),
-      listingId: a.id(),
-      summary: a.string(),
-    })
-    .authorization((allow) => [allow.owner()]),
-
-  reviewSummarizer: a
-    .generation({
-      aiModel: a.ai.model("Claude 3.5 Sonnet"),
-      systemPrompt: `You are a helpful assistant that summarizes reviews. Give a concise summary of the supplied reviews. The summary should be between 20 and 200 characters.`,
-    })
-    .arguments({
-      reviews: a.string().array(),
-    })
-    .returns(
-      a.customType({
-        summary: a.string(),
-      })
-    )
-    .authorization((allow) => [allow.authenticated()]),
-
-  getSalesForListing: a
-    .query()
-    .arguments({
-      listingId: a.string(),
-    })
-    .returns(
-      a.customType({
-        sales: a.float(),
-      })
-    )
-    .authorization((allow) => [allow.authenticated()])
-    .handler(a.handler.function(getSalesForListing)),
-
-  chat: a.conversation({
-    aiModel: a.ai.model("Claude 3.5 Sonnet"),
-    systemPrompt: `You are a helpful assistant for a vacation home rental application. If you use a tool, tell the user you are using a tool. When possible, respond with a UI tool which will display custom UI to the user.`,
-    tools: [
-      {
-        description: `Used to list and search for rental listings`,
-        query: a.ref("listListings"),
-      },
-      {
-        description: `Used to get the current weather of a city`,
-        query: a.ref("getWeather"),
-      },
-      {
-        description: `Used to get the sales for a listing`,
-        query: a.ref("getSalesForListing"),
-      },
-    ],
-  }),
 });
 
 export type Schema = ClientSchema<typeof schema>;

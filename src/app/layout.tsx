@@ -3,7 +3,7 @@ import "@aws-amplify/ui-react/styles/reset.css";
 import "@aws-amplify/ui-react/styles.css";
 import "./globals.css";
 import { cookies } from "next/headers";
-import type { ColorMode } from "@aws-amplify/ui-react";
+import { type ColorMode } from "@aws-amplify/ui-react";
 import { ThemeStyle } from "@aws-amplify/ui-react/server";
 import { theme } from "@/theme";
 // import { theme } from "@/theme/synthTheme";

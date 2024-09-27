@@ -15,6 +15,8 @@ export const ReviewSummarization = ({
     handleSummary({
       reviews: reviews.map((review) => review.text),
     });
+    // Call the API to generate a summary based on the reviews
+    console.log("Generating summary...");
   };
 
   return (

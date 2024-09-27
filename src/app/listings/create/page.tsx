@@ -1,4 +1,5 @@
 "use client";
+import { v4 as uuidv4 } from "uuid";
 import * as React from "react";
 import {
   Flex,
@@ -15,6 +16,17 @@ import { UserContext } from "@/components/UserProvider";
 import { useRouter } from "next/navigation";
 import { client, useAIGeneration } from "@/client";
 import { uploadData } from "aws-amplify/storage";
+import { randomUUID } from "crypto";
+
+function _base64ToArrayBuffer(base64: string) {
+  var binary_string = atob(base64);
+  var len = binary_string.length;
+  var bytes = new Uint8Array(len);
+  for (var i = 0; i < len; i++) {
+    bytes[i] = binary_string.charCodeAt(i);
+  }
+  return bytes;
+}
 
 export default function CreateListingPage() {
   const [images, setImages] = React.useState<string[]>([]);
@@ -29,6 +41,19 @@ export default function CreateListingPage() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = getFormDataFromEvent(event);
+    const imgs: string[] = [];
+    generatedImgs.forEach((img) => {
+      const id = uuidv4();
+      const file = new File([_base64ToArrayBuffer(img)], img, {
+        type: "image/jpeg",
+      });
+      uploadData({
+        path: `protected/${user?.identityId}/${id}.jpg`,
+        data: file,
+      });
+      imgs.push(`protected/${user?.identityId}/${id}.jpg`);
+    });
+    console.log(imgs);
     client.models.Listing.create({
       title: data.title as string,
       type: data.type as string,
@@ -37,7 +62,7 @@ export default function CreateListingPage() {
       numBedrooms: parseInt(data.numBedrooms as string),
       numBathrooms: parseInt(data.numBathrooms as string),
       price: parseFloat(data.price as string),
-      images: images.map((image) => `protected/${user?.identityId}/${image}`),
+      images: imgs,
       amenities: data.amenities as string,
     }).then(() => {
       customToast({
@@ -53,25 +78,47 @@ export default function CreateListingPage() {
     handleGenerateListing({
       description,
     });
-    Promise.all([
-      client.queries.generateImage({
-        prompt: description,
-      }),
-      client.queries.generateImage({
-        prompt: description,
-      }),
-      client.queries.generateImage({
-        prompt: description,
-      }),
-    ]).then((results) => {
-      console.log({ results });
-      const imgs = results
-        .map((result) => {
-          return result?.data?.[0] ?? "";
-        })
-        .filter((img) => img.length);
-      setGeneratedImgs(imgs);
+    const img1 = await client.queries.generateImage({
+      prompt: description,
     });
+    const img2 = await client.queries.generateImage({
+      prompt: description + "interior view",
+    });
+    const img3 = await client.queries.generateImage({
+      prompt: description + "interior view of kitchen",
+    });
+    const img4 = await client.queries.generateImage({
+      prompt: description + "interior view of bedroom",
+    });
+    const img5 = await client.queries.generateImage({
+      prompt: description + "interior view of bedroom",
+    });
+    setGeneratedImgs(
+      [img1, img2, img3, img4, img5].map((img) => {
+        return img?.data?.[0] ?? "";
+      })
+    );
+    // Promise.all([
+    //   client.queries.generateImage({
+    //     prompt: description,
+    //   }),
+    //   client.queries.generateImage({
+    //     prompt: description + "interior view",
+    //   }),
+    //   client.queries.generateImage({
+    //     prompt: description + "interior view of bedroom",
+    //   }),
+    //   client.queries.generateImage({
+    //     prompt: description + "interior view of kitchen",
+    //   }),
+    // ]).then((results) => {
+    //   const imgs = results
+    //     .map((result) => {
+    //       return result?.data?.[0] ?? "";
+    //     })
+    //     .filter((img) => img.length);
+    //   setGeneratedImgs(imgs);
+    // });
   };
 
   return (
