@@ -60,7 +60,6 @@ export default function ListingPage() {
       if (!results.data) {
         return;
       }
-      console.log(results.data);
       setListing(results.data);
     });
   }, [id]);

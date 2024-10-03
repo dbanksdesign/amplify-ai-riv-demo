@@ -2,6 +2,7 @@
   "name": "amplify-ai-riv-demo",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -9,11 +10,11 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@aws-amplify/ui-react": "^6.4.0",
-    "@aws-amplify/ui-react-ai": "^0.2.1",
-    "@aws-amplify/ui-react-storage": "^3.3.2",
+    "@aws-amplify/ui-react": "^6.5.2",
+    "@aws-amplify/ui-react-ai": "^0.3.0",
+    "@aws-amplify/ui-react-storage": "^3.3.6",
     "@mantine/core": "^7.12.2",
-    "aws-amplify": "^6.6.1",
+    "aws-amplify": "^6.6.3",
     "next": "14.2.11",
     "react": "^18",
     "react-dom": "^18",
@@ -40,6 +41,6 @@
     "typescript": "^5.6.2"
   },
   "overrides": {
-    "@aws-amplify/graphql-api-construct": "1.13.0-ai.6"
+    "@aws-amplify/graphql-api-construct": "1.13.0-ai.7"
   }
 }

@@ -20,6 +20,7 @@ const Chat = () => {
   return (
     <AIConversation
       isLoading={isLoading}
+      allowAttachments
       avatars={{
         user: {
           avatar: <Avatar src={imgUrl(user?.image ?? "")} />,

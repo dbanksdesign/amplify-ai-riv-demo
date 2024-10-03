@@ -3,86 +3,7 @@ import { getWeather } from "../functions/getWeather/resource";
 import { generateImage } from "../functions/generateImage/resource";
 
 const schema = a.schema({
-  generateImage: a
-    .query()
-    .arguments({
-      prompt: a.string(),
-    })
-    .returns(a.string().array())
-    .handler(a.handler.function(generateImage))
-    .authorization((allow) => [allow.authenticated()]),
-
-  generateListing: a
-    .generation({
-      aiModel: a.ai.model("Claude 3.5 Sonnet"),
-      systemPrompt: `You are a helpful assistant that generates rental listing information based on a description. Please fill out the information as best as you can. Using the description provided create a catchy title, a bulleted list for amenities, and a longform description between 20 and 200 words. Make up information if none is provided.`,
-      inferenceConfiguration: {
-        temperature: 0.7,
-        topP: 1,
-        maxTokens: 4000,
-      },
-    })
-    .arguments({
-      description: a.string(),
-    })
-    .returns(
-      a.customType({
-        title: a.string(),
-        description: a.string(),
-        amenities: a.string(),
-        numBedrooms: a.integer(),
-        bedrooms: a.string().array(),
-        numBathrooms: a.integer(),
-        type: a.string(),
-        sleeps: a.integer(),
-        sqft: a.integer(),
-        price: a.integer(),
-      })
-    )
-    .authorization((allow) => [allow.authenticated()]),
-
-  reviewSummarizer: a
-    .generation({
-      aiModel: a.ai.model("Claude 3.5 Sonnet"),
-      systemPrompt: `You are a helpful assistant that summarizes reviews. Give a concise summary of the supplied reviews. The summary should be between 20 and 200 characters.`,
-    })
-    .arguments({
-      reviews: a.string().array(),
-    })
-    .returns(
-      a.customType({
-        summary: a.string(),
-      })
-    )
-    .authorization((allow) => [allow.authenticated()]),
-
-  chat: a.conversation({
-    aiModel: a.ai.model("Claude 3.5 Sonnet"),
-    systemPrompt: `You are a helpful assistant for a vacation home rental company.`,
-    tools: [
-      {
-        description: "Used to get the current weather of a city",
-        query: a.ref("getWeather"),
-      },
-      {
-        description: `Used to list rental listings`,
-        query: a.ref("listListings"),
-      },
-    ],
-  }),
-
-  getWeather: a
-    .query()
-    .arguments({ city: a.string() })
-    .returns(
-      a.customType({
-        temperature: a.float(),
-        weatherCode: a.integer(),
-      })
-    )
-    .authorization((allow) => allow.authenticated())
-    .handler(a.handler.function(getWeather)),
-
+  // Data Models
   User: a
     .model({
       username: a.string(),
@@ -143,6 +64,91 @@ const schema = a.schema({
       allow.owner(),
       allow.publicApiKey().to(["read"]),
     ]),
+
+  // Custom Queries
+  getWeather: a
+    .query()
+    .arguments({ city: a.string() })
+    .returns(
+      a.customType({
+        temperature: a.float(),
+        weatherCode: a.integer(),
+      })
+    )
+    .authorization((allow) => allow.authenticated())
+    .handler(a.handler.function(getWeather)),
+  generateImage: a
+    .query()
+    .arguments({
+      prompt: a.string(),
+    })
+    .returns(a.string().array())
+    .handler(a.handler.function(generateImage))
+    .authorization((allow) => [allow.authenticated()]),
+
+  // Generation routes
+  generateListing: a
+    .generation({
+      aiModel: a.ai.model("Claude 3.5 Sonnet"),
+      systemPrompt: `You are a helpful assistant that generates rental listing information based on a description. Please fill out the information as best as you can. Using the description provided create a catchy title, a bulleted list for amenities, and a longform description between 20 and 200 words. Make up information if none is provided.`,
+      inferenceConfiguration: {
+        temperature: 0.7,
+        topP: 1,
+        maxTokens: 4000,
+      },
+    })
+    .arguments({
+      description: a.string(),
+    })
+    .returns(
+      a.customType({
+        title: a.string(),
+        description: a.string(),
+        amenities: a.string(),
+        numBedrooms: a.integer(),
+        numBathrooms: a.integer(),
+        type: a.string(),
+        sleeps: a.integer(),
+        sqft: a.integer(),
+        price: a.integer(),
+      })
+    )
+    .authorization((allow) => [allow.authenticated()]),
+
+  reviewSummarizer: a
+    .generation({
+      aiModel: a.ai.model("Claude 3.5 Sonnet"),
+      systemPrompt: `You are a helpful assistant that summarizes reviews. Give a concise summary of the supplied reviews. The summary should be between 20 and 200 characters.`,
+      inferenceConfiguration: {
+        temperature: 0.2,
+        maxTokens: 100,
+      },
+    })
+    .arguments({
+      reviews: a.string().array(),
+    })
+    .returns(
+      a.customType({
+        summary: a.string(),
+      })
+    )
+    .authorization((allow) => [allow.authenticated()]),
+
+  // Conversation routes
+  chat: a.conversation({
+    aiModel: a.ai.model("Claude 3.5 Sonnet"),
+    systemPrompt: `You are a helpful assistant for a vacation home rental booking application.`,
+    tools: [
+      {
+        description: "Used to get the current weather of a city",
+        query: a.ref("getWeather"),
+      },
+      {
+        description: `Used to list rental listings`,
+        query: a.ref("listListings"),
+      },
+    ],
+  }),
 });
 
 export type Schema = ClientSchema<typeof schema>;
