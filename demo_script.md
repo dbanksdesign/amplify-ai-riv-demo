@@ -1,4 +1,10 @@
-Intro about Amplify AI
+Intro about Amplify
+
+- full-stack, end-to-end typescript
+- per-developer sandboxes
+- CI/CD
+- Backed by CDK
+
 Show the current app state:
 
 - Amplify Gen 2 app: auth, data, storage (custom CDK code too)
@@ -20,7 +26,10 @@ Authorization
   reviewSummarizer: a
     .generation({
       aiModel: a.ai.model("Claude 3.5 Sonnet"),
-      systemPrompt: `You are a helpful assistant that summarizes reviews. Give a concise summary of the supplied reviews. The summary should be between 20 and 200 characters.`,
+      systemPrompt: `
+      You are a helpful assistant that summarizes reviews.
+      Give a concise summary of the supplied reviews.
+      The summary should be between 20 and 200 characters.`,
     })
     .arguments({
       reviews: a.string().array(),
@@ -33,10 +42,53 @@ Authorization
     .authorization((allow) => [allow.authenticated()]),
 ```
 
+```ts
+  reviewSummarizer: a
+    .generation({
+      aiModel: a.ai.model("Claude 3.5 Sonnet"),
+      systemPrompt: `You are a helpful assistant that summarizes reviews. Give a concise summary of the supplied reviews. The summary should be between 20 and 200 characters.`,
+      inferenceConfiguration: {
+        temperature: 0.2,
+        maxTokens: 100,
+      },
+    })
+    .arguments({
+      reviews: a.string().array(),
+    })
+    .returns(
+      a.customType({
+        summary: a.string(),
+      })
+    )
+    .authorization((allow) => [allow.authenticated()]),
+
+  // Conversation routes
+  chat: a.conversation({
+    aiModel: a.ai.model("Claude 3.5 Sonnet"),
+    systemPrompt: `You are a helpful assistant for a vacation home rental booking application.`,
+    tools: [
+      {
+        description: "Used to get the current weather of a city",
+        query: a.ref("getWeather"),
+      },
+      {
+        description: `Used to list rental listings`,
+        query: a.ref("listListings"),
+      },
+    ],
+  }),
+
+```
+
 Go over to our Amplify client and create our AI hooks
 
 ```ts
-export const { useAIConversation, useAIGeneration } = createAIHooks(client);
+import { generateClient } from "aws-amplify/api";
+import { Schema } from "../amplify/data/resource";
+import { createAIHooks } from "@aws-amplify/ui-react-ai";
+
+export const client = generateClient<Schema>({ authMode: "userPool" });
+export const { useAIGeneration, useAIConversation } = createAIHooks(client);
 ```
 
 Now to use this in our React code
@@ -115,7 +167,43 @@ Now go over to React code
 We have also built a simple, but flexible chat component to go along with our AI conversation routes
 
 ```tsx
+const Chat = () => {
+  const { user } = React.useContext(UserContext);
+  const [
+    {
+      data: { messages },
+      isLoading,
+    },
+    handleSendMessage,
+  ] = useAIConversation("chat");
 
+  return (
+    <AIConversation
+      isLoading={isLoading}
+      allowAttachments
+      avatars={{
+        user: {
+          avatar: <UserAvatar />,
+          username: user?.username ?? "",
+        },
+      }}
+      messages={messages}
+      handleSendMessage={handleSendMessage}
+      responseComponents={{
+        ListingCard: {
+          description: "Used to display a rental listing to the user",
+          component: ConnectedListingCard,
+          props: {
+            id: {
+              type: "string",
+              description: "The id of the listing to display",
+            },
+          },
+        },
+      }}
+    />
+  );
+};
 ```
 
 ```ts

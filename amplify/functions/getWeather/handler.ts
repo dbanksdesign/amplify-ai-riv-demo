@@ -11,7 +11,6 @@ export const handler: Schema["getWeather"]["functionHandler"] = async (
   );
 
   const weather = await res.json();
-  console.log(JSON.stringify(weather, null, 2));
 
   return {
     temperature: weather.current.temperature,

@@ -22,7 +22,6 @@ export default function ListingsPage() {
       ],
     }).subscribe({
       next({ items, isSynced }) {
-        console.log({ items });
         if (isSynced) {
           setListings([...items]);
         }

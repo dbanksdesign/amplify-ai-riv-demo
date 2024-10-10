@@ -1,6 +1,5 @@
 import { Button, Message } from "@aws-amplify/ui-react";
 import { Listing } from "./page";
-import { useAIGeneration } from "@/client";
 import Markdown from "react-markdown";
 
 export const ReviewSummarization = ({
@@ -8,13 +7,10 @@ export const ReviewSummarization = ({
 }: {
   reviews: Listing["reviews"];
 }) => {
-  const [{ data, isLoading }, handleSummary] =
-    useAIGeneration("reviewSummarizer");
-
+  const data = { summary: null };
+  const isLoading = false;
   const generateSummary = async () => {
-    handleSummary({
-      reviews: reviews.map((review) => review.text),
-    });
+    // generat summary in here
   };
 
   return (

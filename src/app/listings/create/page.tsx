@@ -16,13 +16,12 @@ import { UserContext } from "@/components/UserProvider";
 import { useRouter } from "next/navigation";
 import { client, useAIGeneration } from "@/client";
 import { uploadData } from "aws-amplify/storage";
-import { randomUUID } from "crypto";
 
 function _base64ToArrayBuffer(base64: string) {
-  var binary_string = atob(base64);
-  var len = binary_string.length;
-  var bytes = new Uint8Array(len);
-  for (var i = 0; i < len; i++) {
+  const binary_string = atob(base64);
+  const len = binary_string.length;
+  const bytes = new Uint8Array(len);
+  for (let i = 0; i < len; i++) {
     bytes[i] = binary_string.charCodeAt(i);
   }
   return bytes;
@@ -193,7 +192,7 @@ export default function CreateListingPage() {
             type="number"
             label="Square Feet"
             name="sqft"
-            defaultValue={generatedListing?.sqft ?? 100}
+            defaultValue={generatedListing?.squareFeet ?? 100}
           />
 
           <TextAreaField
@@ -202,11 +201,7 @@ export default function CreateListingPage() {
             defaultValue={generatedListing?.amenities ?? ""}
           />
 
-          <TextField
-            label="City"
-            name="city"
-            // defaultValue={generatedListing?.city ?? ""}
-          />
+          <TextField label="City" name="city" />
           <TextField
             label="Type"
             name="type"
@@ -220,7 +215,9 @@ export default function CreateListingPage() {
         <View flex="1" padding="large">
           <Text>Images</Text>
           {generatedImgs.map((img) => {
-            return <img src={`data:image/jpeg;base64,${img}`} />;
+            return (
+              <img key={img} src={`data:image/jpeg;base64,${img}`} alt="" />
+            );
           })}
           <StorageManager
             acceptedFileTypes={["*"]}

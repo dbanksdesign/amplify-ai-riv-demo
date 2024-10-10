@@ -109,7 +109,7 @@ const schema = a.schema({
         numBathrooms: a.integer(),
         type: a.string(),
         sleeps: a.integer(),
-        sqft: a.integer(),
+        squareFeet: a.integer(),
         price: a.integer(),
       })
     )
@@ -118,10 +118,14 @@ const schema = a.schema({
   reviewSummarizer: a
     .generation({
       aiModel: a.ai.model("Claude 3.5 Sonnet"),
-      systemPrompt: `You are a helpful assistant that summarizes reviews. Give a concise summary of the supplied reviews. The summary should be between 20 and 200 characters.`,
+      systemPrompt: `
+      You are a helpful assistant that summarizes reviews.
+      Give a concise summary of the supplied reviews. 
+      The summary should be between 20 and 200 characters.`,
       inferenceConfiguration: {
-        temperature: 0.2,
-        maxTokens: 100,
+        temperature: 0.7,
+        topP: 1,
+        maxTokens: 400,
       },
     })
     .arguments({
@@ -133,19 +137,17 @@ const schema = a.schema({
       })
     )
     .authorization((allow) => [allow.authenticated()]),
-
-  // Conversation routes
   chat: a.conversation({
     aiModel: a.ai.model("Claude 3.5 Sonnet"),
-    systemPrompt: `You are a helpful assistant for a vacation home rental booking application.`,
+    systemPrompt: `You are a helpful assistant.`,
     tools: [
       {
-        description: "Used to get the current weather of a city",
-        query: a.ref("getWeather"),
+        description: "Used to list rental listings",
+        query: a.ref("listListings"),
       },
       {
-        description: `Used to list rental listings`,
-        query: a.ref("listListings"),
+        description: "Used to get information about a specific rental listing",
+        query: a.ref("getListing"),
       },
     ],
   }),
