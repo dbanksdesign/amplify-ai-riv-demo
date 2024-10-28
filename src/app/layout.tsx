@@ -19,7 +19,7 @@ export default function RootLayout({
 }>) {
   const cookieStore = cookies();
   const colorMode = (cookieStore.get("colorMode")?.value ??
-    "dark") as ColorMode;
+    "light") as ColorMode;
   return (
     <html lang="en">
       <Head>
