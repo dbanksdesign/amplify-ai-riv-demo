@@ -13,11 +13,13 @@ export const ReviewSummarization = ({
 }: {
   reviews: Listing["reviews"];
 }) => {
-  const [data, setData] = React.useState<SummaryData>({});
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [{ data, isLoading }, handleReviewSummary] =
+    useAIGeneration("reviewSummarizer");
 
   const generateSummary = async () => {
-    setData({ summary: "Testing" });
+    handleReviewSummary({
+      reviews: reviews.map((review) => review.text),
+    });
   };
 
   return (

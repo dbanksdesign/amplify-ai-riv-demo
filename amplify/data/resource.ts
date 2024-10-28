@@ -76,6 +76,24 @@ const schema = a.schema({
     )
     .authorization((allow) => allow.authenticated())
     .handler(a.handler.function(getWeather)),
+  reviewSummarizer: a
+    .generation({
+      aiModel: a.ai.model("Claude 3.5 Sonnet"),
+      systemPrompt: `
+      You are a helpful assistant that summarizes reviews.
+      Give a concise summary of the supplied reviews. 
+      The summary should be between 20 and 200 characters.
+      `,
+    })
+    .arguments({
+      reviews: a.string().array(),
+    })
+    .returns(
+      a.customType({
+        summary: a.string(),
+      })
+    )
+    .authorization((allow) => [allow.authenticated()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
