@@ -114,50 +114,6 @@ const schema = a.schema({
       })
     )
     .authorization((allow) => [allow.authenticated()]),
-
-  reviewSummarizer: a
-    .generation({
-      aiModel: a.ai.model("Claude 3.5 Sonnet"),
-      systemPrompt: `
-      You are a helpful assistant that summarizes reviews.
-      Give a concise summary of the supplied reviews. 
-      The summary should be between 20 and 200 characters.`,
-      inferenceConfiguration: {
-        temperature: 0.7,
-        topP: 1,
-        maxTokens: 400,
-      },
-    })
-    .arguments({
-      reviews: a.string().array(),
-    })
-    .returns(
-      a.customType({
-        summary: a.string(),
-      })
-    )
-    .authorization((allow) => [allow.authenticated()]),
-
-  chat: a.conversation({
-    aiModel: a.ai.model("Claude 3.5 Sonnet"),
-    systemPrompt: `You are a helpful assistant for a vacation home rental app.
-    Where possible, use a UI tool to display a custom component to the user.
-    Don't tell the user the name of the UI tool you are using.`,
-    tools: [
-      {
-        description: "Used to list rental listings",
-        query: a.ref("listListings"),
-      },
-      {
-        description: "Used to get information about a specific rental listing",
-        query: a.ref("getListing"),
-      },
-      {
-        description: "Used to get the weather for a given city",
-        query: a.ref("getWeather"),
-      },
-    ],
-  }),
 });
 
 export type Schema = ClientSchema<typeof schema>;
