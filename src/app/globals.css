@@ -8,3 +8,7 @@
   margin-block: 1rem;
   border-radius: var(--amplify-radii-medium);
 }
+
+.ai-message__content > * + * {
+  margin-block-start: var(--amplify-space-medium);
+}

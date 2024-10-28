@@ -7,11 +7,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^6.5.2",
-    "@aws-amplify/ui-react-ai": "next",
+    "@aws-amplify/ui-react-ai": "^0.0.0-ai-streaming-3f80595-20241025200912",
     "@aws-amplify/ui-react-storage": "^3.3.6",
     "@mantine/core": "^7.12.2",
     "aws-amplify": "^6.6.3",
@@ -37,12 +38,13 @@
     "esbuild": "^0.23.1",
     "eslint": "^8",
     "eslint-config-next": "14.2.11",
+    "patch-package": "^8.0.0",
     "tsx": "^4.19.1",
     "typescript": "^5.6.2"
   },
   "overrides": {
-    "@aws-amplify/graphql-api-construct": "1.13.0-ai.7",
-    "@aws-amplify/data-schema": "1.10.0",
-    "@aws-amplify/graphql-conversation-transformer": "0.2.2"
+    "@aws-amplify/graphql-api-construct": "1.15.1-ai-streaming.7",
+    "@aws-amplify/appsync-modelgen-plugin": "2.13.3-ai-streaming.0",
+    "@aws-amplify/data-schema": "0.0.0-ai-streaming-20241022184857"
   }
 }

@@ -1,0 +1,13 @@
+diff --git a/node_modules/@aws-amplify/ai-constructs/lib/conversation/runtime/bedrock_converse_adapter.js b/node_modules/@aws-amplify/ai-constructs/lib/conversation/runtime/bedrock_converse_adapter.js
+index 139419a..da471d3 100644
+--- a/node_modules/@aws-amplify/ai-constructs/lib/conversation/runtime/bedrock_converse_adapter.js
++++ b/node_modules/@aws-amplify/ai-constructs/lib/conversation/runtime/bedrock_converse_adapter.js
+@@ -90,6 +90,8 @@ class BedrockConverseAdapter {
+                                 },
+                             },
+                         });
++                    } else if (contentElement.toolUse) {
++                        // do nothing, don't include client toolUse blocks
+                     }
+                     else {
+                         // Otherwise type conforms to Bedrock's type and it's safe to cast.

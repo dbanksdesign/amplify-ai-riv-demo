@@ -137,9 +137,12 @@ const schema = a.schema({
       })
     )
     .authorization((allow) => [allow.authenticated()]),
+
   chat: a.conversation({
     aiModel: a.ai.model("Claude 3.5 Sonnet"),
-    systemPrompt: `You are a helpful assistant.`,
+    systemPrompt: `You are a helpful assistant for a vacation home rental app.
+    Where possible, use a UI tool to display a custom component to the user.
+    Don't tell the user the name of the UI tool you are using.`,
     tools: [
       {
         description: "Used to list rental listings",
@@ -148,6 +151,10 @@ const schema = a.schema({
       {
         description: "Used to get information about a specific rental listing",
         query: a.ref("getListing"),
+      },
+      {
+        description: "Used to get the weather for a given city",
+        query: a.ref("getWeather"),
       },
     ],
   }),
