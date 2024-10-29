@@ -12,3 +12,7 @@
 .ai-message__content > * + * {
   margin-block-start: var(--amplify-space-medium);
 }
+
+.amplify-ai-conversation__prompt {
+  flex: 1;
+}

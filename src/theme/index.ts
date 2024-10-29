@@ -8,6 +8,7 @@ import { cardTheme } from "./card";
 
 export const theme = createTheme({
   name: "my-theme",
+  primaryColor: "purple",
   tokens: {
     radii: {
       small: "2rem",
