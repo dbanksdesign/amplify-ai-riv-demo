@@ -92,7 +92,7 @@ const schema = a.schema({
       summary: a.string()
     })
   )
-  .authorization((allow) => [allow.authenticated()])
+  .authorization((allow) => [allow.authenticated()]),
 });
 
 export type Schema = ClientSchema<typeof schema>;
