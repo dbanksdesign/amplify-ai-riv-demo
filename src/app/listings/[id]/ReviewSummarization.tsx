@@ -7,17 +7,14 @@ interface SummaryData {
   summary?: string;
 }
 
-export const ReviewSummarization = ({
-  reviews,
-}: {
-  reviews: string[];
-}) => {
-  const [{ data, isLoading}, handleReviewSummary] = useAIGeneration('reviewSummarizer')
+export const ReviewSummarization = ({ reviews }: { reviews: string[] }) => {
+  const [{ data, isLoading }, handleReviewSummary] =
+    useAIGeneration("reviewSummarizer");
 
   const generateSummary = async () => {
     handleReviewSummary({
-      reviews
-    })
+      reviews,
+    });
   };
 
   return (

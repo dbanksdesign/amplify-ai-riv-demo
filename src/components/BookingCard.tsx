@@ -40,7 +40,7 @@ export const BookingCard = ({ id }: { id: string }) => {
   return (
     <Card variation="elevated" width="80%">
       <Flex direction="column">
-        <Text fontSize="xl" color="font.tertiary">
+        <Text fontSize="xl" color="hotpink">
           {listing?.title}
         </Text>
         <Text fontWeight="bold" fontSize="large">
