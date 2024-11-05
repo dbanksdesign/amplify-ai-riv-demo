@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Button, Message } from "@aws-amplify/ui-react";
-import { Listing } from "./page";
 import Markdown from "react-markdown";
 
 interface SummaryData {
@@ -10,7 +9,7 @@ interface SummaryData {
 export const ReviewSummarization = ({
   reviews,
 }: {
-  reviews: Listing["reviews"];
+  reviews: string[];
 }) => {
   const [data, setData] = React.useState<SummaryData>();
   const [isLoading, setIsLoading] = React.useState(false);

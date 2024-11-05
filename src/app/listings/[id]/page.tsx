@@ -141,7 +141,7 @@ export default function ListingPage() {
                 <Text>{listing.reviews.length} reviews</Text>
               </Flex>
               <View flex="1">
-                <ReviewSummarization reviews={listing.reviews ?? []} />
+                <ReviewSummarization reviews={listing.reviews.map(review => review.text ?? '') ?? []} />
               </View>
             </Flex>
 
