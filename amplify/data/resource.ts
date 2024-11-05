@@ -94,6 +94,22 @@ const schema = a.schema({
       })
     )
     .authorization((allow) => [allow.authenticated()]),
+  convoSearch: a.conversation({
+    aiModel: a.ai.model("Claude 3.5 Sonnet"),
+    systemPrompt: `
+    You are a helpful assistant for a vacation home rental application.
+    `,
+    tools: [
+      {
+        description: `Used to search for and list rental Listings`,
+        query: a.ref("listListings"),
+      },
+      {
+        description: `Used to get a rental listing by ID`,
+        query: a.ref("getListing"),
+      },
+    ],
+  }),
 });
 
 export type Schema = ClientSchema<typeof schema>;

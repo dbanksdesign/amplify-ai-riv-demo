@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^6.5.2",
-    "@aws-amplify/ui-react-ai": "^0.0.0-ai-streaming-3f80595-20241025200912",
+    "@aws-amplify/ui-react-ai": "ai-streaming",
     "@aws-amplify/ui-react-storage": "^3.3.6",
     "@mantine/core": "^7.12.2",
     "aws-amplify": "^6.6.3",
@@ -43,8 +43,8 @@
     "typescript": "^5.6.2"
   },
   "overrides": {
-    "@aws-amplify/graphql-api-construct": "1.15.1-ai-streaming.7",
-    "@aws-amplify/appsync-modelgen-plugin": "2.13.3-ai-streaming.0",
-    "@aws-amplify/data-schema": "0.0.0-ai-streaming-20241022184857"
+    "@aws-amplify/graphql-api-construct": "ai-next",
+    "@aws-amplify/data-schema": "ai-streaming",
+    "@aws-amplify/appsync-modelgen-plugin": "ai-streaming"
   }
 }

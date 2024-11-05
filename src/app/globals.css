@@ -1,6 +1,6 @@
-/* .amplify-ai-conversation__form__attach {
-  display: none;
-} */
+html {
+  font-size: 125%;
+}
 
 .ai-message__image {
   max-width: 400px;

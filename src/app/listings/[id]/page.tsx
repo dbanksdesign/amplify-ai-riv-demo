@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import Link from "next/link";
 import { useParams } from "next/navigation";
 import {
   Button,
@@ -21,7 +20,6 @@ import { Schema } from "../../../../amplify/data/resource";
 import { SelectionSet } from "aws-amplify/api";
 import Markdown from "react-markdown";
 import { Review } from "@/components/Review";
-import { ReviewForm } from "@/components/ReviewForm";
 import { ReviewSummarization } from "./ReviewSummarization";
 import { LuBath, LuBed } from "react-icons/lu";
 

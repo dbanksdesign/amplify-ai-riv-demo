@@ -11,7 +11,7 @@ import {
 import { SelectionSet } from "aws-amplify/api";
 import { Schema } from "../../amplify/data/resource";
 
-const selectionSet = ["price"] as const;
+const selectionSet = ["price", "title"] as const;
 
 type ListingWithSelection = SelectionSet<
   Schema["Listing"]["type"],
@@ -38,10 +38,16 @@ export const BookingCard = ({ id }: { id: string }) => {
     });
   }, [id]);
   return (
-    <Card variation="elevated" width="40%">
+    <Card variation="elevated" width="80%">
       <Flex direction="column">
+        <Text fontSize="xl" color="font.tertiary">
+          {listing?.title}
+        </Text>
         <Text fontWeight="bold" fontSize="large">
-          ${listing?.price}
+          ${listing?.price}{" "}
+          <Text as="span" fontSize="small" color="font.tertiary">
+            / per night
+          </Text>
         </Text>
         <TextField label="Check-in" type="date" />
         <TextField label="Check-out" type="date" />
