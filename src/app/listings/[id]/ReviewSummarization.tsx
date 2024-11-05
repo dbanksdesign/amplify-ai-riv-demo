@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Button, Message } from "@aws-amplify/ui-react";
 import Markdown from "react-markdown";
+import { useAIGeneration } from "@/client";
 
 interface SummaryData {
   summary?: string;
@@ -11,11 +12,12 @@ export const ReviewSummarization = ({
 }: {
   reviews: string[];
 }) => {
-  const [data, setData] = React.useState<SummaryData>();
-  const [isLoading, setIsLoading] = React.useState(false);
+  const [{ data, isLoading}, handleReviewSummary] = useAIGeneration('reviewSummarizer')
 
   const generateSummary = async () => {
-    setData({ summary: "testing" });
+    handleReviewSummary({
+      reviews
+    })
   };
 
   return (
