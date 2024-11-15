@@ -79,7 +79,9 @@ const schema = a.schema({
 
   reviewSummarizer: a
     .generation({
-      aiModel: a.ai.model("Claude 3.5 Sonnet"),
+      aiModel: {
+        resourcePath: "",
+      },
       systemPrompt: `
     You are a helpful assistant that summarizes reviews.
     Provide a concise summary of the reviews provided.
@@ -94,7 +96,27 @@ const schema = a.schema({
         summary: a.string(),
       })
     )
-    .authorization((allow) => [allow.authenticated()]),
+    .authorization((allow) => [
+      allow.authenticated(),
+      allow.publicApiKey(),
+      allow.groups(["Admin"]),
+    ]),
+  chat: a.conversation({
+    aiModel: a.ai.model("Claude 3.5 Sonnet"),
+    systemPrompt: `
+    You are a helpful assistant for a vacation home rental app.
+    `,
+    tools: [
+      {
+        query: a.ref("listListings"),
+        description: "Used to search for rental listings",
+      },
+      {
+        query: a.ref("getListing"),
+        description: "Used to get information about a specific rental listing.",
+      },
+    ],
+  }),
 });
 
 export type Schema = ClientSchema<typeof schema>;
