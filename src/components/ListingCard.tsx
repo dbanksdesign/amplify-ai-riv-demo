@@ -210,7 +210,7 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
         gap="small"
         className={className({ _element: "content" })}
       >
-        <Text>
+        <Text color="red">
           {listing.type} in {listing.city}
         </Text>
         <Text fontSize="xl" fontWeight="bolder" color="font.primary">

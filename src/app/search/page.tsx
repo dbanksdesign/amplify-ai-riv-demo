@@ -1,13 +1,14 @@
 "use client";
+import * as React from "react";
+import { AIConversation } from "@aws-amplify/ui-react-ai";
+import ReactMarkdown from "react-markdown";
+
 import { useAIConversation } from "@/client";
 import { AIContext } from "@/components/AIContext";
 import { BookingCard } from "@/components/BookingCard";
 import { ConnectedListingCard } from "@/components/ListingCard";
 import { UserAvatar } from "@/components/UserAvatar";
 import { UserContext } from "@/components/UserProvider";
-import { AIConversation } from "@aws-amplify/ui-react-ai";
-import * as React from "react";
-import ReactMarkdown from "react-markdown";
 
 export default function SearchPage() {
   const { user } = React.useContext(UserContext);
@@ -23,12 +24,8 @@ export default function SearchPage() {
     <AIConversation
       messages={messages}
       isLoading={isLoading}
-      handleSendMessage={(message) => {
-        handleSendMessage({
-          ...message,
-          aiContext: aiContext?.data,
-        });
-      }}
+      aiContext={() => aiContext.data}
+      handleSendMessage={handleSendMessage}
       allowAttachments
       avatars={{
         user: {

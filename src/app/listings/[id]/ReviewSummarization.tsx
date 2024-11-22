@@ -8,11 +8,11 @@ interface SummaryData {
 }
 
 export const ReviewSummarization = ({ reviews }: { reviews: string[] }) => {
-  const [{ data, isLoading }, handleReviewSummary] =
+  const [{ data, isLoading }, handleGeneration] =
     useAIGeneration("reviewSummarizer");
 
   const generateSummary = async () => {
-    handleReviewSummary({
+    handleGeneration({
       reviews,
     });
   };

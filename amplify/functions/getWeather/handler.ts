@@ -15,5 +15,7 @@ export const handler: Schema["getWeather"]["functionHandler"] = async (
   return {
     temperature: weather.current.temperature,
     weatherCode: weather.current.weather_code,
+    weatherDescriptions: weather.current.weather_descriptions,
+    windSpeed: weather.current.wind_speed,
   };
 };

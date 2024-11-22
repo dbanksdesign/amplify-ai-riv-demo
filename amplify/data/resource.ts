@@ -72,6 +72,8 @@ const schema = a.schema({
       a.customType({
         temperature: a.float(),
         weatherCode: a.integer(),
+        weatherDescriptions: a.string().array(),
+        windSpeed: a.integer(),
       })
     )
     .authorization((allow) => allow.authenticated())
@@ -79,9 +81,7 @@ const schema = a.schema({
 
   reviewSummarizer: a
     .generation({
-      aiModel: {
-        resourcePath: "",
-      },
+      aiModel: a.ai.model("Claude 3 Haiku"),
       systemPrompt: `
     You are a helpful assistant that summarizes reviews.
     Provide a concise summary of the reviews provided.
@@ -96,27 +96,31 @@ const schema = a.schema({
         summary: a.string(),
       })
     )
-    .authorization((allow) => [
-      allow.authenticated(),
-      allow.publicApiKey(),
-      allow.groups(["Admin"]),
-    ]),
-  chat: a.conversation({
-    aiModel: a.ai.model("Claude 3.5 Sonnet"),
-    systemPrompt: `
+    .authorization((allow) => [allow.authenticated()]),
+
+  chat: a
+    .conversation({
+      aiModel: a.ai.model("Claude 3.5 Haiku"),
+      systemPrompt: `
     You are a helpful assistant for a vacation home rental app.
+    When you use a tool or UI component don't tell the user the name of the tool.
     `,
-    tools: [
-      {
-        query: a.ref("listListings"),
-        description: "Used to search for rental listings",
-      },
-      {
-        query: a.ref("getListing"),
-        description: "Used to get information about a specific rental listing.",
-      },
-    ],
-  }),
+      tools: [
+        a.ai.dataTool({
+          model: a.ref("Listing"),
+          modelOperation: "list",
+          description:
+            "Used to search for rental listing records. Filtering based on string values using `contains` and `eq` will are case sensitive. Where appropriate, use combinations of `and` and `or` to ensure items are found. Do not use the `limit` field.",
+          name: "SearchListings",
+        }),
+        a.ai.dataTool({
+          query: a.ref("getWeather"),
+          description: "Gets the weather for a city",
+          name: "GetWeather",
+        }),
+      ],
+    })
+    .authorization((allow) => allow.owner()),
 });
 
 export type Schema = ClientSchema<typeof schema>;
