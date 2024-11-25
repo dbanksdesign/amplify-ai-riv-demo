@@ -10,7 +10,7 @@ export const listingCardTheme = defineComponentTheme({
       borderRadius: tokens.radii.large,
       position: "relative",
       overflow: "hidden",
-      padding: "0",
+      padding: tokens.space.medium,
       _element: {
         image_container: {
           width: "30%",

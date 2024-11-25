@@ -17,21 +17,22 @@ interface ReviewProps {
 
 const options: Intl.DateTimeFormatOptions = {
   month: "long",
-  day: "numeric",
+  // day: "numeric",
   year: "numeric",
 };
 
 export const Review = ({ review }: ReviewProps) => {
   return (
-    <Flex direction="column">
-      <Flex direction="row">
+    <Flex direction="column" gap="xs">
+      <Flex direction="row" alignItems="center">
         {/* Hiding username because its all me */}
         {/* <Text>{review.reviewer?.username}</Text> */}
+        <Rating readOnly value={review.score ?? 0} />
         <Text>
           {new Date(review.createdAt).toLocaleString("en-US", options)}
         </Text>
       </Flex>
-      <Rating readOnly value={review.score ?? 0} />
+
       <Text>{review.text}</Text>
     </Flex>
   );

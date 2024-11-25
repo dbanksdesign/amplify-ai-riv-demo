@@ -1,44 +1,40 @@
 "use client";
 import * as React from "react";
-import { AIConversation } from "@aws-amplify/ui-react-ai";
-import ReactMarkdown from "react-markdown";
-
 import { useAIConversation } from "@/client";
-import { AIContext } from "@/components/AIContext";
-import { BookingCard } from "@/components/BookingCard";
+import { AIConversation } from "@aws-amplify/ui-react-ai";
 import { ConnectedListingCard } from "@/components/ListingCard";
 import { UserAvatar } from "@/components/UserAvatar";
 import { UserContext } from "@/components/UserProvider";
 
-export default function SearchPage() {
+export const Chat = ({ id }: { id: string }) => {
   const { user } = React.useContext(UserContext);
-  const aiContext = React.useContext(AIContext);
   const [
     {
       data: { messages },
       isLoading,
     },
     handleSendMessage,
-  ] = useAIConversation("chat");
+  ] = useAIConversation("chat", {
+    id,
+  });
+
+  console.log(messages);
+
   return (
     <AIConversation
       messages={messages}
       isLoading={isLoading}
-      aiContext={() => aiContext.data}
       handleSendMessage={handleSendMessage}
-      allowAttachments
       avatars={{
         user: {
           avatar: <UserAvatar />,
           username: user?.username ?? "",
         },
       }}
-      messageRenderer={{
-        text: ({ text }) => <ReactMarkdown>{text}</ReactMarkdown>,
-      }}
+      allowAttachments
       responseComponents={{
         ListingCard: {
-          description: "used to display a rental listing to the user",
+          description: "Used to display a rental listing to the user",
           component: ConnectedListingCard,
           props: {
             id: {
@@ -47,17 +43,7 @@ export default function SearchPage() {
             },
           },
         },
-        BookingCard: {
-          component: BookingCard,
-          description: "UI component that lets users book a rental listing",
-          props: {
-            id: {
-              type: "string",
-              description: "ID of the listing",
-            },
-          },
-        },
       }}
     />
   );
-}
+};

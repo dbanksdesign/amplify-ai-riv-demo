@@ -12,7 +12,12 @@ export const Header = ({ children }: React.PropsWithChildren) => {
   const { user } = React.useContext(UserContext);
   return (
     <View className={headerTheme.className()}>
-      <Flex direction="row" alignItems="center">
+      <Flex
+        direction="row"
+        alignItems="center"
+        width="1200px"
+        marginInline="auto"
+      >
         <Flex direction="row" alignItems="center" flex="1" gap="large">
           <Link href="/listings">
             <LuBird />

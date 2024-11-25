@@ -16,6 +16,7 @@ import { Rating } from "@mantine/core";
 import { LuBath, LuBed } from "react-icons/lu";
 import { SelectionSet } from "aws-amplify/api";
 import { listingCardTheme } from "@/theme/listingCard";
+import { AIContext } from "./AIContext";
 
 export const selectionSet = [
   "id",
@@ -28,6 +29,7 @@ export const selectionSet = [
   "numBathrooms",
   "numBedrooms",
   "reviews.score",
+  "reviews.text",
 ] as const;
 
 export type ListingWithSelection = SelectionSet<
@@ -86,7 +88,7 @@ export const ConnectedSmallListingCard = ({
   }, [id]);
 
   return listing ? (
-    <Card className={className()} variation="elevated" padding="0">
+    <Card className={className()} variation="outlined" padding="medium">
       <Image
         className={className({ _element: "image_small" })}
         src={listing.images?.[0] ?? ""}
@@ -151,6 +153,7 @@ export const ConnectedSmallListingCard = ({
 
 export const ConnectedListingCard = ({ id }: ConnectedListingCardProps) => {
   const [listing, setListing] = React.useState<ListingWithSelection>();
+  const { setData } = React.useContext(AIContext);
 
   React.useEffect(() => {
     if (!id) return;
@@ -166,8 +169,11 @@ export const ConnectedListingCard = ({ id }: ConnectedListingCardProps) => {
         return;
       }
       setListing(results.data);
+      setData({
+        listing: results.data,
+      });
     });
-  }, [id]);
+  }, [id, setData]);
 
   return listing ? (
     <ListingCard listing={listing} />
@@ -204,7 +210,7 @@ export const ListingCard = ({ listing }: ListingCardProps) => {
         gap="small"
         className={className({ _element: "content" })}
       >
-        <Text>
+        <Text color="red">
           {listing.type} in {listing.city}
         </Text>
         <Text fontSize="xl" fontWeight="bolder" color="font.primary">

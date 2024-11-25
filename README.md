@@ -1,36 +1,89 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```ts
+  reviewSummarizer: a
+    .generation({
+      aiModel: a.ai.model("Claude 3.5 Sonnet"),
+      systemPrompt: `
+      You are a helpful assistant that summarizes reviews.
+      Give a concise summary of the supplied reviews.
+      The summary should be between 20 and 200 characters.
+      `,
+    })
+    .arguments({
+      reviews: a.string().array(),
+    })
+    .returns(
+      a.customType({
+        summary: a.string(),
+      })
+    )
+    .authorization((allow) => [allow.authenticated()]),
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```ts
+const dataTools = [
+  {
+    name: "listListings",
+    description: "Used to search for and list rental Listings",
+    inputSchema: {
+      json: {
+        type: "object",
+        properties: {
+          filter: {
+            type: "object",
+            properties: {
+              description: {
+                type: "object",
+                properties: {
+                  contains: {
+                    type: "string",
+                  },
+                },
+              },
+              title: {
+                type: "object",
+                properties: {
+                  contains: {
+                    type: "string",
+                  },
+                },
+              },
+            },
+          },
+        },
+        required: [],
+      },
+    },
+    graphqlRequestInputDescriptor: {
+      selectionSet:
+        "items { title description amenities numBedrooms bedrooms numBathrooms images type sleeps sqft reviews { items { listingId reviewer { username reservations { items { userId listingId startDate endDate id createdAt updatedAt owner } nextToken } location identityId image id createdAt updatedAt owner } reviewerId date text score id createdAt updatedAt owner } nextToken } reservations { items { userId user { username reviews { items { listingId reviewerId date text score id createdAt updatedAt owner } nextToken } location identityId image id createdAt updatedAt owner } listingId startDate endDate id createdAt updatedAt owner } nextToken } host { username reviews { items { listingId reviewerId date text score id createdAt updatedAt owner } nextToken } reservations { items { userId listingId startDate endDate id createdAt updatedAt owner } nextToken } location identityId image id createdAt updatedAt owner } hostId price city state zip id createdAt updatedAt owner } nextToken",
+      propertyTypes: {
+        filter: "ModelListingFilterInput",
+      },
+      queryName: "listListings",
+    },
+  },
+  {
+    name: "getListing",
+    description: "Used to get a rental listing by ID",
+    inputSchema: {
+      json: {
+        type: "object",
+        properties: {
+          id: {
+            type: "string",
+            description:
+              "A unique identifier for an object. This scalar is serialized like a String but isn't meant to be human-readable.",
+          },
+        },
+        required: ["id"],
+      },
+    },
+    graphqlRequestInputDescriptor: {
+      selectionSet:
+        "title description amenities numBedrooms bedrooms numBathrooms images type sleeps sqft reviews { items { listingId reviewer { username listings { nextToken } reservations { items { userId listingId startDate endDate id createdAt updatedAt owner } nextToken } location identityId image id createdAt updatedAt owner } reviewerId date text score id createdAt updatedAt owner } nextToken } reservations { items { userId user { username listings { nextToken } reviews { items { listingId reviewerId date text score id createdAt updatedAt owner } nextToken } location identityId image id createdAt updatedAt owner } listingId startDate endDate id createdAt updatedAt owner } nextToken } host { username listings { nextToken } reviews { items { listingId reviewerId date text score id createdAt updatedAt owner } nextToken } reservations { items { userId listingId startDate endDate id createdAt updatedAt owner } nextToken } location identityId image id createdAt updatedAt owner } hostId price city state zip id createdAt updatedAt owner",
+      propertyTypes: { id: "ID!" },
+      queryName: "getListing",
+    },
+  },
+];
+```
