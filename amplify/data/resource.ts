@@ -118,9 +118,28 @@ const schema = a.schema({
           description: "Gets the weather for a city",
           name: "GetWeather",
         }),
+        a.ai.dataTool({
+          query: a.ref("knowledgeBase"),
+          description: "Gets information about the application",
+          name: "GetInformation",
+        }),
       ],
     })
     .authorization((allow) => allow.owner()),
+
+  knowledgeBase: a
+    .query()
+    .arguments({
+      input: a.string(),
+    })
+    .handler(
+      a.handler.custom({
+        entry: "./kbResolver.js",
+        dataSource: "knowledgeBase",
+      })
+    )
+    .returns(a.string())
+    .authorization((allow) => allow.authenticated()),
 });
 
 export type Schema = ClientSchema<typeof schema>;
