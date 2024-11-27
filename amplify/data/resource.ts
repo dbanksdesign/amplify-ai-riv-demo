@@ -97,49 +97,6 @@ const schema = a.schema({
       })
     )
     .authorization((allow) => [allow.authenticated()]),
-
-  chat: a
-    .conversation({
-      aiModel: a.ai.model("Claude 3.5 Haiku"),
-      systemPrompt: `
-    You are a helpful assistant for a vacation home rental app.
-    When you use a tool or UI component don't tell the user the name of the tool.
-    `,
-      tools: [
-        a.ai.dataTool({
-          model: a.ref("Listing"),
-          modelOperation: "list",
-          description:
-            "Used to search for rental listing records. Filtering based on string values using `contains` and `eq` will are case sensitive. Where appropriate, use combinations of `and` and `or` to ensure items are found. Do not use the `limit` field.",
-          name: "SearchListings",
-        }),
-        a.ai.dataTool({
-          query: a.ref("getWeather"),
-          description: "Gets the weather for a city",
-          name: "GetWeather",
-        }),
-        a.ai.dataTool({
-          query: a.ref("knowledgeBase"),
-          description: "Gets information about the application",
-          name: "GetInformation",
-        }),
-      ],
-    })
-    .authorization((allow) => allow.owner()),
-
-  knowledgeBase: a
-    .query()
-    .arguments({
-      input: a.string(),
-    })
-    .handler(
-      a.handler.custom({
-        entry: "./kbResolver.js",
-        dataSource: "knowledgeBase",
-      })
-    )
-    .returns(a.string())
-    .authorization((allow) => allow.authenticated()),
 });
 
 export type Schema = ClientSchema<typeof schema>;
