@@ -97,6 +97,27 @@ const schema = a.schema({
       })
     )
     .authorization((allow) => [allow.authenticated()]),
+  chat: a
+    .conversation({
+      aiModel: a.ai.model("Claude 3.5 Haiku"),
+      systemPrompt: `
+    You are a helpful assistant to a home rental booking app.
+    `,
+      tools: [
+        a.ai.dataTool({
+          model: a.ref("Listing"),
+          modelOperation: "list",
+          name: "SearchListing",
+          description: "Used to search for rental listings",
+        }),
+        a.ai.dataTool({
+          query: a.ref("getWeather"),
+          name: "GetWeather",
+          description: "Used to get the weather for a city.",
+        }),
+      ],
+    })
+    .authorization((allow) => allow.owner()),
 });
 
 export type Schema = ClientSchema<typeof schema>;
