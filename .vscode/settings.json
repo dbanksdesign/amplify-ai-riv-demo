@@ -8,7 +8,7 @@
   "editor.hover.enabled": false,
   "editor.cursorBlinking": "solid",
   "editor.minimap.enabled": false,
-  // "editor.stickyScroll.enabled": false,
+  "editor.stickyScroll.enabled": false,
   // // "editor.renderLineHighlight": "none",
   "breadcrumbs.enabled": false,
   // "zenMode.centerLayout": false,
