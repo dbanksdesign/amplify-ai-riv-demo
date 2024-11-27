@@ -97,26 +97,23 @@ const schema = a.schema({
       })
     )
     .authorization((allow) => [allow.authenticated()]),
-
   chat: a
     .conversation({
       aiModel: a.ai.model("Claude 3.5 Haiku"),
       systemPrompt: `
-    You are a helpful assistant for a vacation home rental app.
-    When you use a tool or UI component don't tell the user the name of the tool.
+    You are a helpful assistant to a home rental booking app.
     `,
       tools: [
         a.ai.dataTool({
           model: a.ref("Listing"),
           modelOperation: "list",
-          description:
-            "Used to search for rental listing records. Filtering based on string values using `contains` and `eq` will are case sensitive. Where appropriate, use combinations of `and` and `or` to ensure items are found. Do not use the `limit` field.",
-          name: "SearchListings",
+          name: "SearchListing",
+          description: "Used to search for rental listings",
         }),
         a.ai.dataTool({
           query: a.ref("getWeather"),
-          description: "Gets the weather for a city",
           name: "GetWeather",
+          description: "Used to get the weather for a city.",
         }),
       ],
     })
