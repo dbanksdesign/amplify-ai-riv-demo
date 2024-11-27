@@ -7,8 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "patch-package"
+    "lint": "next lint"
   },
   "dependencies": {
     "@aws-amplify/ui-react": "^6.6.0",
@@ -37,7 +36,6 @@
     "esbuild": "^0.23.1",
     "eslint": "^8",
     "eslint-config-next": "14.2.11",
-    "patch-package": "^8.0.0",
     "tsx": "^4.19.1",
     "typescript": "^5.6.2"
   }
