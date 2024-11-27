@@ -1,7 +1,5 @@
 "use client";
 
 export default function SearchPage() {
-  return (
-    <div>Coming soon!</div>
-  );
+  return <div>Coming soon</div>;
 }
